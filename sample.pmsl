@@ -1,0 +1,27 @@
+workflow wfstarter
+	node start
+		transition to task1
+	end
+	
+	state task1
+		transition to post1
+		
+		enter
+			subject = "Create Task"
+			message = ""
+			task = "subject,message"
+		end
+	end
+	
+	state post1
+		transition to task1
+		
+		enter
+			post = "https://pmw.furthermore.ch/definitionsX/"+subWfId+",message,email,iftttKey"
+		end
+	end
+	
+	node done
+	end
+end
+		
