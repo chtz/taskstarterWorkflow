@@ -6,31 +6,85 @@ workflow alarmanlage
     state waitForWfIf
         transition to notifyInit
         transition to presenceInit
+
+        enter
+            notifyCount = 0
+            presCount = 0
+            notification = 0
+        end
     end
 
     state notifyInit
-        transition to notifyInit
+        transition to notifyOn
 
         enter
+            notifyCount = notifyCount + 1
+            presCountx = presCount
+            notifyCountx = notifyCount
             iftttKey = iftttKeyx
             email = emailx
             wfid = wfidx
-            subject = "Notification configuration"
+            subject = "Alarm enable/disable config endpoint"
             message = "curl -d '{}' -H 'Content-Type: application/json'  https://pmw.furthermore.ch/tokens/" + wfid + "/" + id
-            task = "subject,message,wfid,id"
+            task = "subject,message"
         end
+    end
+
+    state notifyOn
+        transition to notifyOn2
+
+        enter
+            notification = 1
+            value1 = "Presence notificatons are enabled"
+            post = "https://maker.ifttt.com/trigger/test/with/key/"+iftttKey+",value1"
+        end
+    end
+
+    state notifyOn2
+        transition to notifyOff
+    end
+
+    state notifyOff
+        transition to notifyOff2
+
+        enter
+            notification = 0
+            value1 = "Presence notificatons are disabled"
+            post = "https://maker.ifttt.com/trigger/test/with/key/"+iftttKey+",value1"
+        end
+    end
+
+    state notifyOff2
+        transition to notifyOn
     end
     
     state presenceInit
-        transition to presenceInit
+        transition to waitPresenceTrigger
 
         enter
+            presCount = presCount + 1
+            presCountx = presCount
+            notifyCountx = notifyCount
             iftttKey = iftttKeyx
             email = emailx
             wfid = wfidx
-            subject = "Presence configuration"
-            message = "curl -d '{}' -H 'Content-Type: application/json'  https://pmw.furthermore.ch/tokens/" + wfid + "/" + id
-            task = "subject,message,wfid,id"
+            subject = "Alarm notification endpoint"
+            message = "curl -d '{\"presence\":\"Presence!\"}' -H 'Content-Type: application/json'  https://pmw.furthermore.ch/tokens/" + wfid + "/" + id
+            task = "subject,message"
+        end
+    end
+
+    state waitPresenceTrigger
+        transition to waitPresenceTrigger if notification == 0
+        transition to notifyAlarm if notification == 1
+    end
+
+    state notifyAlarm
+        transition to waitPresenceTrigger
+
+        enter
+            value1 = presence
+            post = "https://maker.ifttt.com/trigger/test/with/key/"+iftttKey+",value1"
         end
     end
     
