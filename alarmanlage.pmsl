@@ -1,0 +1,44 @@
+workflow alarmanlage
+    node start
+        transition to waitForWfIf
+    end
+    
+    state waitForWfIf
+        transition to notifyInit
+        transition to presenceInit
+    end
+
+    state notifyInit
+        transition to notifyInit
+
+        enter
+            iftttKey = iftttKeyx
+            email = emailx
+            wfid = wfidx
+            subject = "Notification configuration"
+            message = "curl -d '{}' -H 'Content-Type: application/json'  https://pmw.furthermore.ch/tokens/" + wfid + "/" + id
+            task = "subject,message,wfid,id"
+        end
+    end
+    
+    state presenceInit
+        transition to presenceInit
+
+        enter
+            iftttKey = iftttKeyx
+            email = emailx
+            wfid = wfidx
+            subject = "Presence configuration"
+            message = "curl -d '{}' -H 'Content-Type: application/json'  https://pmw.furthermore.ch/tokens/" + wfid + "/" + id
+            task = "subject,message,wfid,id"
+        end
+    end
+    
+    join join1
+        transition to done
+    end
+
+    node done
+    end
+end
+        
