@@ -8,6 +8,8 @@ workflow alarmanlage
         transition to presenceInit
 
         enter
+            notifyCount = 0
+            presCount = 0
             notification = 0
         end
     end
@@ -16,7 +18,15 @@ workflow alarmanlage
         transition to notifyOn
 
         enter
+            notifyCount = notifyCount + 1
+            presCountx = presCount
+            notifyCountx = notifyCount
             iftttKey = iftttKeyx
+            email = emailx
+            wfid = wfidx
+            subject = "Alarm enable/disable config endpoint"
+            message = "curl -d '{}' -H 'Content-Type: application/json'  https://pmw.furthermore.ch/tokens/" + wfid + "/" + id
+            task = "subject,message"
         end
     end
 
@@ -52,7 +62,15 @@ workflow alarmanlage
         transition to waitPresenceTrigger
 
         enter
+            presCount = presCount + 1
+            presCountx = presCount
+            notifyCountx = notifyCount
             iftttKey = iftttKeyx
+            email = emailx
+            wfid = wfidx
+            subject = "Alarm notification endpoint"
+            message = "curl -d '{\"presence\":\"Presence!\"}' -H 'Content-Type: application/json'  https://pmw.furthermore.ch/tokens/" + wfid + "/" + id
+            task = "subject,message"
         end
     end
 
@@ -69,4 +87,12 @@ workflow alarmanlage
             post = "https://maker.ifttt.com/trigger/test/with/key/"+iftttKey+",value1"
         end
     end
+    
+    join join1
+        transition to done
+    end
+
+    node done
+    end
 end
+        
