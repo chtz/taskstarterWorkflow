@@ -37,5 +37,9 @@ echo Config loop activated
 
 ./target.sh "https://pmw.furthermore.ch/tokensX/$WF_ID/$CONFIG_TOKEN_ID" > /dev/null
 
-echo IFTTT mystrom applet \(indirectly\) adjusted new target:
+echo IFTTT mystrom applet \(indirectly\) adjusted to new target:
 echo https://pmw.furthermore.ch/tokensX/$WF_ID/$CONFIG_TOKEN_ID
+
+scp ifttt_notify.sh ubuntee2.local:~/hue/scripts/ifttt_notify.sh
+
+echo HUE alert script replaced
