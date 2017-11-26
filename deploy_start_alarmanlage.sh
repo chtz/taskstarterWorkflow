@@ -35,5 +35,7 @@ export WF_ID=$(curl -s -d "{}" -H 'Content-Type: application/json;charset=utf-8'
 
 echo Config loop activated
 
-echo Please adjust IFTTT mystrom applet to new target:
-echo https://pmw.furthermore.ch/tokens/$WF_ID/$CONFIG_TOKEN_ID
+./target.sh "https://pmw.furthermore.ch/tokensX/$WF_ID/$CONFIG_TOKEN_ID" > /dev/null
+
+echo IFTTT mystrom applet \(indirectly\) adjusted new target:
+echo https://pmw.furthermore.ch/tokensX/$WF_ID/$CONFIG_TOKEN_ID

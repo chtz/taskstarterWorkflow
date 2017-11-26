@@ -1,0 +1,34 @@
+workflow delegate
+    node start
+        transition to configLoop
+        transition to delegateLoop
+
+        enter
+            targetUrl = ""
+        end
+    end
+
+    state configLoop
+        transition to config
+    end
+
+    node config
+        transition to configLoop
+
+        enter
+            targetUrl = config
+        end
+    end
+
+    state delegateLoop
+        transition to delegate
+    end
+
+    state delegate
+        transition to delegateLoop
+
+        enter
+            post = targetUrl
+        end
+    end
+end
