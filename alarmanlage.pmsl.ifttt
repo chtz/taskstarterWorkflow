@@ -14,6 +14,10 @@ workflow alarmanlage
 
     state notifyInit
         transition to notifyOn
+
+        enter
+            iftttKey = iftttKeyx
+        end
     end
 
     state notifyOn
@@ -21,8 +25,8 @@ workflow alarmanlage
 
         enter
             notification = 1
-            message = "Presence notificatons are enabled"
-            post = notifyUrl + ",message"
+            value1 = "Presence notificatons are enabled"
+            post = "https://maker.ifttt.com/trigger/test/with/key/"+iftttKey+",value1"
         end
     end
 
@@ -35,8 +39,8 @@ workflow alarmanlage
 
         enter
             notification = 0
-            message = "Presence notificatons are disabled"
-            post = notifyUrl + ",message"
+            value1 = "Presence notificatons are disabled"
+            post = "https://maker.ifttt.com/trigger/test/with/key/"+iftttKey+",value1"
         end
     end
 
@@ -46,6 +50,10 @@ workflow alarmanlage
     
     state presenceInit
         transition to waitPresenceTrigger
+
+        enter
+            iftttKey = iftttKeyx
+        end
     end
 
     state waitPresenceTrigger
@@ -57,8 +65,8 @@ workflow alarmanlage
         transition to waitPresenceTrigger
 
         enter
-            message = presence
-            post = notifyUrl + ",message"
+            value1 = presence
+            post = "https://maker.ifttt.com/trigger/test/with/key/"+iftttKey+",value1"
         end
     end
 end

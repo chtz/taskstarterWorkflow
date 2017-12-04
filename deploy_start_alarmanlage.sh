@@ -5,12 +5,14 @@
 export DEF_ID=`curl -s --data-binary @alarmanlage.pmsl -H'Content-Type:text/plain' https://pmw.furthermore.ch/definitions`
 
 echo Workflow definition created: $DEF_ID
- 
-export WF_ID=`curl -s --data-binary "{\"iftttKeyx\":\"$IFTTT_KEY\"}" -H'Content-Type:application/json' https://pmw.furthermore.ch/definitions/$DEF_ID`
+
+export NOTIFY_URL=$(cat delegate_2.url)
+
+export WF_ID=`curl -s --data-binary "{\"notifyUrl\":\"$NOTIFY_URL\"}" -H'Content-Type:application/json' https://pmw.furthermore.ch/definitions/$DEF_ID`
 
 echo Workflow instance started: $WF_ID
 
-export WF_ID=`curl -s --data-binary "{\"wfidx\":\"$WF_ID\"}" -H'Content-Type:application/json' https://pmw.furthermore.ch/instances/$WF_ID`
+export WF_ID=`curl -s --data-binary "{}" -H'Content-Type:application/json' https://pmw.furthermore.ch/instances/$WF_ID`
 
 echo Workflow instance signaled: $WF_ID
 
@@ -40,6 +42,6 @@ echo Config loop activated
 echo IFTTT mystrom applet \(indirectly\) adjusted to new target:
 echo https://pmw.furthermore.ch/tokensX/$WF_ID/$CONFIG_TOKEN_ID
 
-scp ifttt_notify.sh ubuntee2.local:~/hue/scripts/ifttt_notify.sh
+scp ifttt_notify.sh 192.168.178.25:~/hue/scripts/ifttt_notify.sh
 
 echo HUE alert script replaced
