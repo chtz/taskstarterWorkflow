@@ -8,39 +8,45 @@ workflow alarmanlage
         transition to presenceInit
 
         enter
-            notification = 0
+            notificationG = "1"
         end
     end
 
     state notifyInit
         transition to notifyOn
+
+        enter
+            notification = "1"
+        end
     end
 
     state notifyOn
         transition to notifyOn2
 
         enter
-            notification = 1
-            message = "Presence notificatons are enabled"
+            if notification == "" then
+                if notificationG == "1" then  
+                  notification = "0"
+                end
+                if notificationG == "0" then  
+                  notification = "1"
+                end
+            end
+            notificationG = notification
+            message = "internal error"
+            if notificationG == "1" then
+                message = "Presence notificatons are enabled"
+                notification = "0"
+            end
+            if notificationG == "0" then
+                message = "Presence notificatons are disabled"
+                notification = "1"
+            end
             post = notifyUrl + ",message"
         end
     end
 
     state notifyOn2
-        transition to notifyOff
-    end
-
-    state notifyOff
-        transition to notifyOff2
-
-        enter
-            notification = 0
-            message = "Presence notificatons are disabled"
-            post = notifyUrl + ",message"
-        end
-    end
-
-    state notifyOff2
         transition to notifyOn
     end
     
@@ -49,8 +55,8 @@ workflow alarmanlage
     end
 
     state waitPresenceTrigger
-        transition to waitPresenceTrigger if notification == 0
-        transition to notifyAlarm if notification == 1
+        transition to waitPresenceTrigger if notificationG == "0"
+        transition to notifyAlarm if notificationG == "1"
     end
 
     state notifyAlarm

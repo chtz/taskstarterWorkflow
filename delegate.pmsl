@@ -28,7 +28,7 @@ workflow delegate
         transition to delegateLoop
 
         enter
-            post = targetUrl
+            post = targetUrl + ",notification"
         end
     end
 end

@@ -33,7 +33,7 @@ EOL
 
 echo Alarm script created: ifttt_notify.sh
 
-export WF_ID=$(curl -s -d "{}" -H 'Content-Type: application/json;charset=utf-8' https://pmw.furthermore.ch/tokens/$WF_ID/$CONFIG_TOKEN_ID)
+export WF_IDx=$(curl -s -d "{}" -H 'Content-Type: application/json;charset=utf-8' https://pmw.furthermore.ch/tokens/$WF_ID/$CONFIG_TOKEN_ID)
 
 echo Config loop activated
 

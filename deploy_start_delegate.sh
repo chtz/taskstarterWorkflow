@@ -24,7 +24,11 @@ echo Delegate token obtained: $DELEGATE_TOKEN_ID
 
 cat >delegate.sh <<EOL
 #!/bin/bash
-curl -s -d "{}" -H 'Content-Type: application/json;charset=utf-8' https://pmw.furthermore.ch/tokens/$WF_ID/$DELEGATE_TOKEN_ID
+curl -s -d "{\"notification\":\"\$1\"}" -H 'Content-Type: application/json;charset=utf-8' https://pmw.furthermore.ch/tokens/$WF_ID/$DELEGATE_TOKEN_ID
+EOL
+
+cat >delegate.url <<EOL
+https://pmw.furthermore.ch/tokensX/$WF_ID/$DELEGATE_TOKEN_ID
 EOL
 
 echo Delegate script created: delegate.sh
