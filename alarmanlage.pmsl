@@ -24,6 +24,9 @@ workflow alarmanlage
         transition to notifyOn2
 
         enter
+            if notification == "x" then
+                notification = notificationG
+            end
             if notification == "" then
                 if notificationG == "1" then  
                   notification = "0"
@@ -32,16 +35,16 @@ workflow alarmanlage
                   notification = "1"
                 end
             end
+            
             notificationG = notification
-            message = "internal error"
+            
             if notificationG == "1" then
                 message = "Presence notificatons are enabled"
-                notification = "0"
             end
             if notificationG == "0" then
                 message = "Presence notificatons are disabled"
-                notification = "1"
             end
+
             post = notifyUrl + ",message"
         end
     end
