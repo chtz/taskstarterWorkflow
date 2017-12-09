@@ -7,3 +7,6 @@ delegate_2.url
 target_2.sh
 env.sh
 delegate.url
+delegate_3.url
+delegate_3.sh
+target_3.sh

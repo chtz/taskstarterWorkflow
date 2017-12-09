@@ -18,9 +18,11 @@ echo Workflow instance signaled: $WF_ID
 
 export CONFIG_TOKEN_ID=$(curl -s https://pmw.furthermore.ch/instances/$WF_ID | jq '.children[] | select(.node == "notifyInit")' | jq -r '.vars.id')
 export ALARM_TOKEN_ID=$(curl -s https://pmw.furthermore.ch/instances/$WF_ID | jq '.children[] | select(.node == "presenceInit")' | jq -r '.vars.id')
+export GEO_TOKEN_ID=$(curl -s https://pmw.furthermore.ch/instances/$WF_ID | jq '.children[] | select(.node == "geoInit")' | jq -r '.vars.id')
 
 echo Config token obtained: $CONFIG_TOKEN_ID
 echo Alarm token obtained: $ALARM_TOKEN_ID
+echo Geo token obtained: $GEO_TOKEN_ID
 
 export WF_ID=$(curl -s -d "{}" -H 'Content-Type: application/json;charset=utf-8' https://pmw.furthermore.ch/tokens/$WF_ID/$ALARM_TOKEN_ID)
 
@@ -45,3 +47,14 @@ echo https://pmw.furthermore.ch/tokensX/$WF_ID/$CONFIG_TOKEN_ID
 scp ifttt_notify.sh 192.168.178.25:~/hue/scripts/ifttt_notify.sh
 
 echo HUE alert script replaced
+
+#
+
+export WF_IDx=$(curl -s -d "{}" -H 'Content-Type: application/json;charset=utf-8' https://pmw.furthermore.ch/tokens/$WF_ID/$GEO_TOKEN_ID)
+
+echo Geo loop activated
+
+./target_3.sh "https://pmw.furthermore.ch/tokensX/$WF_ID/$GEO_TOKEN_ID" > /dev/null
+
+echo Geo target 3 adjusted to new geo target:
+echo https://pmw.furthermore.ch/tokensX/$WF_ID/$GEO_TOKEN_ID

@@ -6,10 +6,80 @@ workflow alarmanlage
     state waitForWfIf
         transition to notifyInit
         transition to presenceInit
+        transition to geoInit
 
         enter
             notificationG = "1"
         end
+    end
+
+    state geoInit
+        transition to geoWait
+
+        enter
+            geoA = "unknown"
+            geoB = "unknown"
+            newState = "unknown"
+            oldState = "unknown"
+        end
+    end
+
+    state geoWait
+        transition to geoWait2
+
+        enter
+          if geo == "CEA3BC87-5514-4A46-B4E1-E4E95AA9D23B" then
+            geoA = event
+          end
+          if geo == "0A586E4B-4402-4977-BDCF-71C155D5CD96" then
+            geoB = event
+          end
+          
+          if geoA == "enter" then
+            newState = "home"
+          end
+          if geoB == "enter" then
+            newState = "home"
+          end
+
+          if geoA == "leave" then
+            if geoB == "leave" then
+              newState = "away"
+            end
+            if geoB == "unknown" then
+              newState = "away"
+            end
+          end
+          if geoB == "leave" then
+            if geoA == "unknown" then
+              newState = "away"
+            end
+          end
+
+          message = "no geo state change"
+
+          if oldState == "unknown" then
+            message = "new geo state: " + newState
+          end
+          if oldState == "home" then
+            if newState == "away" then
+              message = "new geo state: " + newState
+            end
+          end
+          if oldState == "away" then
+            if newState == "home" then
+              message = "new geo state: " + newState
+            end
+          end
+
+          oldState = newState
+
+          post = notifyUrl + ",message"
+        end
+    end
+
+    state geoWait2
+        transition to geoWait
     end
 
     state notifyInit
